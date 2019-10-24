@@ -1,0 +1,2 @@
+# Photo Grapher
+Photo Grapher is a graphing app which allows an input of an equation either in the form of a photo that can be clicked or just  uploaded or user can also simply type the equation. Google Vision API can be used to extract the equation from the photo. Using this equation, a graph has to be plotted on the cartesian plane on the next activity and important points like roots, critical points have to be shown. Graph can also be zoomed in and out.
