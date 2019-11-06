@@ -8,7 +8,13 @@ Graphing and solving an equation can be made simple by Photo Grapher. Typing out
 
 ## Installation
 
+```console
    git clone https://github.com/avikumar15/PhotoGrapher
+```
+
+## Current Status
+
+The initial code of the app consists of the main activity and an activity which uses the phone's camera. Main Activity has a EditText with a camera icon. On clicking camera icon, the camera activity is launched.
 
 ## Building the app
 
