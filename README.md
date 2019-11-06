@@ -12,7 +12,7 @@ Graphing and solving an equation can be made simple by Photo Grapher. Typing out
 
 ## Building the app
 
-Open the Split Personality directory in Android Studio to build the application.
+Open the Photo Grapher directory in Android Studio to build the application.
 
 ## Issue Management
 
