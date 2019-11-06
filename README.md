@@ -8,7 +8,7 @@ Graphing and solving an equation can be made simple by Photo Grapher. Typing out
 
 ## Installation
 
-```console
+```bash
    git clone https://github.com/avikumar15/PhotoGrapher
 ```
 
