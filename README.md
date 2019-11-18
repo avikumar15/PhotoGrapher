@@ -4,7 +4,7 @@ Android App that graphs and solves an equation whose input is an eqaution either
 
 ## Introduction
 
-Graphing and solving an equation can be made simple by Photo Grapher. Typing out a big maths equation at times may feel silly and tiring. Photo Graphy allows you to write such big equations (instead of type), and click a pic containing the equation to be later scanned using the Google Vision API. User, however, should be given the conventional option of typing out an equation. Along with the graph, roots and critical points should be mentioned.
+Graphing and solving an equation can be made simple by Photo Grapher. Typing out a big maths equation at times may feel silly and tiring. Photo Graphy allows you to write such big equations (instead of type), and click a pic containing the equation to be later scanned using the Mathpix API or Google Vision API. User, however, should be given the conventional option of typing out an equation. Along with the graph, roots and critical points should be mentioned.
 
 ## Installation
 
