@@ -15,10 +15,10 @@
     mathEditor.getValue();
     mathEditor.noKeyboard();
 
-    <!--
+    /*
     There is a bug in some component that doesn't allow text to be entered without pressing enter
     once. This is worked around by simulating a enter key press event on the div containing the math
-    -->
+    */
     var el = document.getElementById('math_input');
     var ev = document.createEvent('Event');
     ev.initEvent('keypress');
