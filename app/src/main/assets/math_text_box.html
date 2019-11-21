@@ -1,0 +1,37 @@
+<html>
+<head>
+    <link href="mathquill/mathquill.css" rel="stylesheet"/>
+    <link href="mathquill/matheditor.css" rel="stylesheet"/>
+    <script src="mathquill/jquery.min.js" type="text/javascript"></script>
+    <script src="mathquill/mathquill.js" type="text/javascript"></script>
+    <script src="mathquill/matheditor.js" type="text/javascript"></script>
+</head>
+<body>
+
+<div id="math_input"></div>
+
+<script type="text/javascript">
+	var mathEditor = new MathEditor('math_input');
+    mathEditor.getValue();
+    mathEditor.noKeyboard();
+
+    <!--
+    There is a bug in some component that doesn't allow text to be entered without pressing enter
+    once. This is worked around by simulating a enter key press event on the div containing the math
+    -->
+    var el = document.getElementById('math_input');
+    var ev = document.createEvent('Event');
+    ev.initEvent('keypress');
+    ev.which = ev.keyCode = 13;
+    el.dispatchEvent(ev);
+
+    function updateLatex(latex) {
+        mathEditor.setLatex(latex);
+    }
+
+
+</script>
+
+</body>
+
+</html>
