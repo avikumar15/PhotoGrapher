@@ -5,7 +5,6 @@
     <link href="css/mathquill.css" rel="stylesheet"/>
     <link href="css/matheditor.css" rel="stylesheet"/>
     <link href="css/style.css" rel="stylesheet"/>
-    <script src="js/js.js" type="text/javascript"></script>
     <script src="js/jquery.min.js" type="text/javascript"></script>
     <script src="js/mathquill.js" type="text/javascript"></script>
     <script src="js/matheditor.js" type="text/javascript"></script>
@@ -32,7 +31,12 @@
     function updateLatex(latex) {
         mathEditor.setLatex(latex);
     }
-	
+
+	/*
+	The required latex is passed on through URL parameters.
+	This is done because it is easier to persist any changes made by the user when moved to graph
+	activity.
+	*/
 	updateLatex((new URL(window.location.href)).searchParams.get('latex'));
 </script>
 
