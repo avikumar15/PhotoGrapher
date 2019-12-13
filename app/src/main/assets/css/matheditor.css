@@ -1,6 +1,10 @@
+body{
+	width: 100%;
+}
 .matheditor-btn-span{
-    min-width: 40px;
-    height: auto;
+    min-width: 35px;
+    height: 40px;
+	vertical-align: middle;
     background: transparent;
     border: 1px solid #ddd;
     margin-right: 4px;
@@ -8,10 +12,9 @@
     background: #F9F9F9;
     cursor: pointer;
     overflow: hidden;
-    vertical-align: middle;
     display: inline-block;
     color: #000000;
-    font-size: 12pt;
+    font-size: 16px;
     line-height: 30px;
 }
 .matheditor-btn-span:hover{
@@ -19,25 +22,32 @@
     border: 1px solid #aaa
 }
 .mq-editable-field span.mq-hasCursor{
-  box-shadow: #68b4df 0 0 3px 2px !important; 
+  box-shadow: #68b4df 0 0 3px 2px !important;
 }
 .op-btn .op-btn-icon{
     width: 100%;
     text-align: center;
     cursor: pointer;
+	vertical-align: middle;
 }
 div[class^="matheditor-wrapper-"]{
-    /*margin: auto;*/
+    margin: auto;
 }
 div[class^="matheditor-toolbar-"]{
-    margin-bottom: 3px;
+    position: fixed;
+    bottom:205px;
+	margin-bottom: 3px;
     border: 1px solid #ddd;
     padding: 5px;
     border-radius: 4px;
     background: #FFF;
 }
-div[class^="matheditor-wrapper-"] sup{
+div[class^="matheditor-wrapper-"] .mq-sup{
+	font-size: 80% !important; 
     top: 0;
+}
+div[class^="matheditor-wrapper-"] .mq-sub{
+	font-size: 80% !important;
 }
 div[class^="matheditor-wrapper-"] .mq-editable-field, .mq-math-mode .mq-editable-field{
     border: 1px solid #ddd;
@@ -56,8 +66,6 @@ div[class^="matheditor-wrapper-"] .op-btn img {
     top: 5px;
 }
 div[class^="matheditor-wrapper-"] .mq-root-block, .mq-math-mode .mq-root-block{
-    white-space: initial;
-    word-wrap: break-word;
     box-shadow: none !important;
 }
 
@@ -67,19 +75,24 @@ div[class^="matheditor-wrapper-"] ul[class^="tabs-"]{
     list-style: none;
     border-bottom: 1px solid #f4f4f4;
     margin-bottom: 5px;
+	white-space: nowrap;
+	overflow-x: scroll;
+    height: 30px;
 }
 div[class^="matheditor-wrapper-"] ul[class^="tabs-"] li{
     display: inline-block;
     padding: 2px 10px;
     cursor: pointer;
     margin: 0px;
-    height: 20px;
+    height: 25px;
+	font-size: 20px;
 }
 
 div[class^="matheditor-wrapper-"] li.current{
-    background: #F9F9F9;
-    color: #222;
+    background: #444;
+    color: #ffffff;
     font-weight: bold;
+    border-radius: 10px;
 }
 
 div[class^="matheditor-wrapper-"] .tab-content-me{
@@ -87,34 +100,25 @@ div[class^="matheditor-wrapper-"] .tab-content-me{
 }
 
 div[class^="matheditor-wrapper-"] .tab-content-me.current{
-    display: inline-block;
-}
-
-[id^="selectable-cube_root-"] .mq-root-block, [id^="selectable-root-"] .mq-root-block, [id^="selectable-square_root-"] .mq-root-block{
-   padding-top: 5px !important;
-   font-size: 10pt;
-}
-
-[id^="tab-2-"] .mq-root-block, [id^="tab-3-"] .mq-root-block{
-    padding-top: 4px !important;
-    font-size: 15pt;
+    display: block;
+    height: 88px;
+    max-height: 88px;
+    overflow-y: scroll;
 }
 
 .mq-math-mode var.mq-f {
     margin-right: 0;
     margin-left: 0;
 }
-span[id^="close-btn-"]{
-    float: right;
-    border: 1px solid;
-    border-radius: 3px;
-    padding: 0px 5px;
-    color: pink;
-    cursor: pointer;
+
+div[class^="keyboard-"]{
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
+
 div[id^="keys-"]{
     text-align: center;
-    display: none; 
+    display: block; 
     position:fixed;
     z-index:999999;
     bottom:0px;
@@ -124,7 +128,7 @@ div[id^="keys-"]{
 }
 div[id^="keys-"] .ks{
     height: 45px;
-    width: 35px;
+    width: 25px;
     display: inline-block;
     background: #f5f5f5;
     text-align: center;
@@ -132,16 +136,13 @@ div[id^="keys-"] .ks{
     text-decoration: none;
     color: #000000;
     cursor: pointer;
+	border: 1px solid;
+	border-radius: 5px;
+	margin: 1px;
     font-size: 14pt;
 }
-div[id^="keys-"] .ks:hover{
-    background: #cccccc;
-}
-div[id^="keys-"] .ks:active{
-    background: #bbbbbb;
-}
-div[id^="keys-"] .ks.long{
-    width: 45px;
+.long{
+    width: 90px;
 }
 div[id^="keys-"] .ks.icon{
     font-weight: bold;
@@ -153,8 +154,6 @@ div[id^="keys-"] .ks.takeup{
 div[id^="keys-"] .ks.too_long{
     background: #eeeeee;
 }
-div.close-btn{
-    height: 30px;
-    position: relative;
-    right: 8px;
+div[id^="keys-"] .ks{
+	
 }

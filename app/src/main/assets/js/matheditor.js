@@ -2,7 +2,7 @@ function MathEditor(id){
     this.isMobile = true;
     this.MQ=null;
     jq = window.jQuery;
-    this.tabEnabled = false;
+    this.tabEnabled = true;
     this.answerMathField = ((typeof this.answerMathField != 'undefined')? this.answerMathField : {});
     this.answerSpan = ((typeof this.answerSpan != 'undefined')? this.answerSpan : {});
     this.topElements = {
@@ -12,223 +12,10 @@ function MathEditor(id){
     }
     mathed_tmp = ((typeof mathed_tmp != 'undefined')? mathed_tmp : {});
     this.template = 'default';
-    this.default_toolbar_buttons =
-    ["fraction",
-    "square_root",
-    "cube_root",
-    "root",
-    "square",
-    "cube",
-    "power",
-    "plus",
-    "minus",
-    'multiplication',
-    'division',
-    'pi',
-    'sin',
-    'cos',
-    'tan',
-    'cot',
-    'sec',
-    'cosec',
-    'equal',
-    'not_equal',
-    'greater_equal',
-    'less_equal',
-    'greater_than',
-    'less_than',
-    'integral_limit',
-    'round_brackets',
-    'x',
-    'y'
-    ];
-    this.default_toolbar_tabs = ["General","Symbols","Geometry"];
-    button_meta =
-{
-	"fraction": {
-		latex: "\\frac{}{}",
-		moveto: "Up",
-		movefor: 1,
-		tab: 1,
-		icon:'\\frac{\\square}{\\square}'
-	},
-	"square_root": {
-		latex: "\\sqrt{}",
-		moveto: "Left",
-		movefor: 1,
-		tab: 1,
-		icon:'\\sqrt{\\square}'
-	},
-	"cube_root": {
-	    latex: "\\sqrt[3]{}",
-	    moveto: "Left",
-	    movefor: 1,
-	    tab: 1,
-	    icon:'\\sqrt[3]{\\square}'
-	},
-	"root": {
-	    latex: "\\sqrt[{}]{}",
-	    moveto: "Left",
-	    movefor: 2,
-	    tab: 1,
-	    icon:'\\sqrt[\\square]{\\square}'
-	},
-	"square": {
-	    latex: "\\^2",
-	    moveto: "Up",
-	    movefor: 1,
-	    tab: 1,
-	    icon:'\\square^2'
-	},
-	"cube": {
-	    latex: "\\^3",
-	    moveto: "Up",
-	    movefor: 1,
-	    tab: 1,
-	    icon:'\\square^3'
-	},
-	"power": {
-	    latex: "\\^{}",
-	    moveto: "Up",
-	    movefor: 1,
-	    tab: 1,
-	    icon:'\\square^\\square'
-	},
-	"multiplication": {
-	    latex: "\\times",
-	    tab: 2,
-	    icon:'\\times'
-	},
-	"division": {
-	    latex: "\\div",
-	    tab: 2,
-	    icon:'\\div'
-	},
-	"plus": {
-	    latex: "+",
-	    tab: 2,
-	    icon:'\\+'
-	},
-	"minus": {
-	    latex: "-",
-	    tab: 2,
-	    icon:'\\-'
-	},
-	"plus_minus": {
-	    latex: "\\pm",
-	    tab: 2,
-	    icon:'\\pm'
-	},
-	"pi": {
-	    latex: "\\pi",
-	    tab: 2,
-	    icon:'\\pi'
-	},
-	"sin": {
-    	latex: "\\sin()",
-    	moveto: "Left",
-        movefor: 1,
-    	tab: 2,
-    	icon:'\\sin(\\square)'
-    },
-    "sin": {
-        latex: "\\sin()",
-        moveto: "Left",
-        movefor: 1,
-        tab: 2,
-        icon:'\\sin(\\square)'
-    },
-    "cos": {
-        latex: "\\cos()",
-        moveto: "Left",
-        movefor: 1,
-        tab: 2,
-        icon:'\\cos(\\square)'
-    },
-    "tan": {
-        latex: "\\tan()",
-        moveto: "Left",
-        movefor: 1,
-        tab: 2,
-        icon:'\\tan(\\square)'
-    },
-    "cot": {
-        latex: "\\cot()",
-        moveto: "Left",
-        movefor: 1,
-        tab: 2,
-        icon:'\\cot(\\square)'
-    },
-    "sec": {
-        latex: "\\sec()",
-        moveto: "Left",
-        movefor: 1,
-        tab: 2,
-        icon:'\\sec(\\square)'
-    },
-    "cosec": {
-        latex: "\\cosec()",
-        moveto: "Left",
-        movefor: 1,
-        tab: 2,
-        icon:'\\cosec(\\square)'
-    },
-	"not_equal": {
-	    latex: "\\neq",
-	    tab: 2,
-	    icon:'\\neq'
-	},
-	"equal": {
-	    latex: "=",
-	    tab: 2,
-	    icon:'='
-	},
-	"greater_equal": {
-	    latex: "\\geq",
-	    tab: 2,
-	    icon:'\\geq'
-	},
-	"less_equal": {
-	    latex: "\\leq",
-	    tab: 2,
-	    icon:'\\leq'
-	},
-	"greater_than": {
-	    latex: "\\gt",
-	    tab: 2,
-	    icon:'\\gt'
-	},
-	"less_than": {
-	    latex: "\\lt",
-	    tab: 2,
-	    icon:'\\lt'
-	},
-	"integral_limit": {
-	    latex: "\\int{}\\mathrm{d}{}",
-	    moveto: "Left",
-        movefor: 3,
-	    tab: 2,
-	    icon:'\\int{\\square}\\mathrm{d}{\\square}'
-	},
-	"round_brackets": {
-	    latex: "\\left(\\right)",
-	    moveto: "Left",
-	    movefor: 1,
-	    tab: 1,
-	    icon:'\\left(\\square\\right)'
-	},
-	"x": {
-    	latex: "x",
-    	tab: 2,
-        icon:'x'
-    },
-    "y": {
-        latex: "y",
-        tab: 2,
-        icon:'y'
-    }
- };
-    keyboard_keys = {'letters': [{'value': 'q', 'type': 'write', 'class':'ks', 'display':'q', 'new_line': false}, {'value': 'w', 'type': 'write', 'class':'ks', 'display':'w', 'new_line': false}, {'value': 'e', 'type': 'write', 'class':'ks', 'display':'e', 'new_line': false}, {'value': 'r', 'type': 'write', 'class':'ks', 'display':'r', 'new_line': false}, {'value': 't', 'type': 'write', 'class':'ks', 'display':'t', 'new_line': false}, {'value': 'y', 'type': 'write', 'class':'ks', 'display':'y', 'new_line': false}, {'value': 'u', 'type': 'write', 'class':'ks', 'display':'u', 'new_line': false}, {'value': 'i', 'type': 'write', 'class':'ks', 'display':'i', 'new_line': false}, {'value': 'o', 'type': 'write', 'class':'ks', 'display':'o', 'new_line': false}, {'value': 'p', 'type': 'write', 'class':'ks', 'display':'p', 'new_line': true}, {'value': 'a', 'type': 'write', 'class':'ks', 'display':'a', 'new_line': false}, {'value': 's', 'type': 'write', 'class':'ks', 'display':'s', 'new_line': false}, {'value': 'd', 'type': 'write', 'class':'ks', 'display':'d', 'new_line': false}, {'value': 'f', 'type': 'write', 'class':'ks', 'display':'f', 'new_line': false}, {'value': 'g', 'type': 'write', 'class':'ks', 'display':'g', 'new_line': false}, {'value': 'h', 'type': 'write', 'class':'ks', 'display':'h', 'new_line': false}, {'value': 'j', 'type': 'write', 'class':'ks', 'display':'j', 'new_line': false}, {'value': 'k', 'type': 'write', 'class':'ks', 'display':'k', 'new_line': false}, {'value': 'l', 'type': 'write', 'class':'ks', 'display':'l', 'new_line': true}, {'value': 'CapsLock', 'type': 'custom', 'class':'ks long icon', 'display':'&#8673;', 'new_line': false}, {'value': 'z', 'type': 'write', 'class':'ks', 'display':'z', 'new_line': false}, {'value': 'x', 'type': 'write', 'class':'ks', 'display':'x', 'new_line': false}, {'value': 'c', 'type': 'write', 'class':'ks', 'display':'c', 'new_line': false}, {'value': 'v', 'type': 'write', 'class':'ks', 'display':'v', 'new_line': false}, {'value': 'b', 'type': 'write', 'class':'ks', 'display':'b', 'new_line': false}, {'value': 'n', 'type': 'write', 'class':'ks', 'display':'n', 'new_line': false}, {'value': 'm', 'type': 'write', 'class':'ks', 'display':'m', 'new_line': false}, {'value': 'Backspace', 'type': 'keystroke', 'class':'ks long icon', 'display':'&#8678;', 'new_line': true}, {'value': 'numpad', 'type': 'custom', 'class':'ks long', 'display':'123', 'new_line': false}, {'value': ',', 'type': 'write', 'class':'ks', 'display':',', 'new_line': false}, {'value': '\\ ', 'type': 'write', 'class':'ks too_long', 'display':'Space', 'new_line': false}, {'value': '.', 'type': 'write', 'class':'ks', 'display':'.', 'new_line': false}, {'value': 'close', 'type': 'custom', 'class':'ks long takeup', 'display':'X', 'new_line': false}], 'numbers': [{'value': '1', 'type': 'write', 'class':'ks', 'display':'1', 'new_line': false}, {'value': '2', 'type': 'write', 'class':'ks', 'display':'2', 'new_line': false}, {'value': '3', 'type': 'write', 'class':'ks', 'display':'3', 'new_line': false}, {'value': '+', 'type': 'write', 'class':'ks', 'display':'+', 'new_line': false}, {'value': '-', 'type': 'write', 'class':'ks', 'display':'&#8315;', 'new_line': true}, {'value': '4', 'type': 'write', 'class':'ks', 'display':'4', 'new_line': false}, {'value': '5', 'type': 'write', 'class':'ks', 'display':'5', 'new_line': false}, {'value': '6', 'type': 'write', 'class':'ks', 'display':'6', 'new_line': false}, {'value': '\\times', 'type': 'write', 'class':'ks', 'display':'&times;', 'new_line': false}, {'value': '/', 'type': 'write', 'class':'ks', 'display':'&#247;', 'new_line': true}, {'value': '7', 'type': 'write', 'class':'ks', 'display':'7', 'new_line': false}, {'value': '8', 'type': 'write', 'class':'ks', 'display':'8', 'new_line': false}, {'value': '9', 'type': 'write', 'class':'ks', 'display':'9', 'new_line': false}, {'value': '=', 'type': 'write', 'class':'ks', 'display':'=', 'new_line': false}, {'value': 'Backspace', 'type': 'keystroke', 'class':'ks long icon', 'display':'&#8678;', 'new_line': true}, {'value': 'letters', 'type': 'custom', 'class':'ks long', 'display':'ABC', 'new_line': false}, {'value': '0', 'type': 'write', 'class':'ks', 'display':'0', 'new_line': false}, {'value': '?', 'type': 'write', 'class':'ks', 'display':'?', 'new_line': false}, {'value': '%', 'type': 'write', 'class':'ks', 'display':'%', 'new_line': false}, {'value': 'close', 'type': 'custom', 'class':'ks long takeup', 'display':'X', 'new_line': false}]};
+    this.default_toolbar_buttons = default_toolbar_buttons_array;
+    this.default_toolbar_tabs = ["General","Symbols","Trigonometry"];
+    button_meta = toolbar_button_latex_definitions;
+keyboard_keys = keyboard_buttons;
     this.MQ = MathQuill.getInterface(2);
     this.answerSpan = document.getElementById(id);
     var config = {
@@ -318,12 +105,16 @@ setVirtualKeyboard = function(top_elements,answer_span,field,keyboard_type,count
     jq(html).insertAfter(answer_span);
     jq(answer_span).find('textarea').attr('readonly','readonly');
     jq(answer_span).focusin(function(o){
-        jq("[id^=keys-]").find('a').css('width',(jq(window).width()/count));
-        jq("[id^=keys-]").find('.too_long').css('width',(jq(window).width()/count)*5);
+        jq("[id^=keys-]").find('a').css('width',(jq(window).width()/count) - 5);
+        jq("[id^=keys-]").find('.too_long').css('width',(jq(window).width()/count)*5 - 8);
+        jq("[id^=keys-]").find('.long').css('width',(jq(window).width()/count)*3/2 - 5);
+        jq("[id^=keys-]").find('.long1').css('width',(jq(window).width()/count)*2 - 6);
         jq('#keys-'+jq(this).attr('id')).slideDown();
     });
-    jq("[id^=keys-]").find('a').css('width',(jq(window).width()/count));
-    jq("[id^=keys-]").find('.too_long').css('width',(jq(window).width()/count)*5);
+    jq("[id^=keys-]").find('a').css('width',(jq(window).width()/count) - 5);
+    jq("[id^=keys-]").find('.too_long').css('width',(jq(window).width()/count)*5 - 8);
+    jq("[id^=keys-]").find('.long').css('width',(jq(window).width()/count)*3/2 - 5);
+    jq("[id^=keys-]").find('.long1').css('width',(jq(window).width()/count)*2 - 6);
     keyboardAction(top_elements,answer_span,field);
 }
 
@@ -351,33 +142,41 @@ keyboardAction = function(top_elements,answer_span,field){
             if(typeof value == 'string'){if(caps){value = value.toUpperCase()}else{value = value.toLowerCase()}}
             field.write(value);
             field.focus();
+		}else if(type=='cmd'){
+			field.cmd(value);
+			field.focus();
         }else if(type=='custom'){
             if(value=='CapsLock'){
                 caps = !caps;
                 if (caps){
-                    jq(this).css('background','#bbbbbb');
-                    jq(this).css('color','#428bca');
+                    jq(a).css('background','#bbbbbb');
+                    jq(a).css('color','#428bca');
                     jq('.ks').css('text-transform','uppercase')
                 }else{
-                    jq(this).css('background','#f5f5f5');
-                    jq(this).css('color','#000000');
+                    jq(a).css('background','#f5f5f5');
+                    jq(a).css('color','#000000');
                     jq('.ks').css('text-transform','lowercase');
                 }
                 field.focus();
             }else if(value=='numpad'){
                 jq('.keyboard-letters-'+editor_id).remove();
-                setVirtualKeyboard(top_elements,answer_span,field,"numbers",5);
+                setVirtualKeyboard(top_elements,answer_span,field,"numbers",6);
                 jq('.keyboard-numbers-'+editor_id).parent().show();
             }else if(value=='letters'){
                 jq('.keyboard-numbers-'+editor_id).remove();
                 setVirtualKeyboard(top_elements,answer_span,field,"letters",10);
                 jq('.keyboard-letters-'+editor_id).parent().show();
             }else if(value=='close'){
-                jq(this).parent().parent().slideUp();
+                jq(a).parent().parent().slideUp();
             }
         }
     });
 }
+
+resizeFunction = function() {
+	basicStyling(this.answerSpan, this.answerMathField);
+    setVirtualKeyboard(this.topElements, this.answerSpan, this.answerMathField, "numbers",6);
+};
 
 setCloseButton = function(top_elements, answer_span){
     editor_id = jq(answer_span).attr('id')
@@ -386,7 +185,7 @@ setCloseButton = function(top_elements, answer_span){
     jq('#close-btn-'+editor_id).on('click',function(e){
         top_elements.toolbar.hide();
     });
-}   
+}
 
 setToolbar = function(btns,answer_span,answer_math_field,top_elements,tabs,tabEnabled,isMobile){
     if (answer_span && top_elements.toolbar){
@@ -436,15 +235,15 @@ setToolbar = function(btns,answer_span,answer_math_field,top_elements,tabs,tabEn
         });
 
     }
-    html+="</div><div><br>Enter equation : <br></div>"
-
+    html+="</div>"
     jq(answer_span).wrap(wrapper_html);
-    jq(html).insertBefore(answer_span);
+    jq(html).insertAfter(answer_span);
+
     top_elements.wrapper = jq(answer_span.parentElement);
-    top_elements.toolbar = jq(answer_span.parentElement.firstChild);
+    top_elements.toolbar = jq(answer_span.parentElement.children[1]);
     top_elements.buttons = top_elements.toolbar.find('.op-btn');
     button_task(answer_math_field,top_elements);
-    
+
     MQN = MathQuill.getInterface(2);
     required_buttons.forEach(function(b,idx){
         if(button_meta[b]){
@@ -463,16 +262,30 @@ setToolbar = function(btns,answer_span,answer_math_field,top_elements,tabs,tabEn
         jq("#"+tab_id).addClass('current');
     });
     if(isMobile){
-        setVirtualKeyboard(top_elements,answer_span,answer_math_field,'letters',10);
+        setVirtualKeyboard(top_elements,answer_span,answer_math_field,'numbers',6);
     }
     basicStyling(answer_span,top_elements);
+
 };
 
 button_task = function(field,top_elements){
     top_elements.buttons.on('click', function(o){
         latex = jq(this).data('latex');
         field.write(latex);
-        field.focus();
+		field.focus();
+		switch(latex){
+			case '\\sin' :
+			case '\\cos' :
+			case '\\tan' :
+			case '\\cot' :
+			case '\\sec' :
+			case '\\cosec' :
+			case '\\log' :
+			case '\\ln' :
+			case '\\log_{}' :
+				field.cmd('(');
+				field.focus();
+		}
         for(var i=1; i<=jq(this).data('movefor'); i++){
             field.keystroke(jq(this).data('moveto'));
         }
@@ -494,17 +307,17 @@ removeFromArray = function(arr) {
             this.default_toolbar_buttons.splice(index, 1);
     });
 };
-     
+
 basicStyling = function(answer_span,top_elements){
     jq(answer_span).css('white-space', 'nowrap');
-    jq(answer_span).css('overflow', 'auto');
-    jq(answer_span).css('min-width', '100px');
-    jq(answer_span).css('max-width', '90%');
+    jq(answer_span).css('overflow-x', 'auto');
     jq(answer_span).css('min-height', 40);
+    jq(answer_span).css('width', jq(window).width() - 25);
     jq(answer_span).css('padding', 5);
     jq(answer_span).css('background', '#fbfafa');
-    jq(answer_span).css('font-size', '20pt');
-    answerSpanWidth = jq(answer_span).width();
-    top_elements.wrapper.css('width','100%');
-    top_elements.toolbar.css('width','95%');
+    jq(answer_span).css('font-size', '24pt');
+    jq('#math_input').css('height', jq(window).height() - jq('.matheditor-toolbar-math_input').height() - jq('#keys-math_input').height() - 40);
+    jq('#math_input').css('max-height', jq(window).height() - jq('.matheditor-toolbar-math_input').height() - jq('#keys-math_input').height() - 40);
+	answerSpanWidth = jq(answer_span).width();
+    jq('.matheditor-toolbar-math_input').css('width', jq(window).width() - 25);
 };
