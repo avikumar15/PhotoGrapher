@@ -36,18 +36,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onCameraButtonClick() {
-        /*
-         * For the time being let the string 'latexString' be returned from the API that retrieves
-         * the math equations from the image. Now, we have to pass this into the webView and update
-         * the contents of the math input box. This is demonstrated by passing a test LaTex string
-         * to the webView.
-         */
         Intent intent = new Intent(MainActivity.this, CameraActivity.class);
-        //Intent intent = new Intent(MainActivity.this, EquationActivity.class);
         startActivity(intent);
     }
 
     private void onManualEntryButtonClick() {
+        /*
+         * A blank EquationActivity is opened
+         */
         Intent intent = new Intent(this, EquationActivity.class);
         intent.putExtra("latex", "");
         startActivity(intent);
