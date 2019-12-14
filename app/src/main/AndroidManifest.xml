@@ -16,6 +16,10 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".GraphActivity"
+            android:label="Graph"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".EquationActivity"
             android:label="Equation"
             android:screenOrientation="portrait" />

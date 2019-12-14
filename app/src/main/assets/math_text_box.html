@@ -16,7 +16,7 @@
 
 <script type="text/javascript">
 	var mathEditor = new MathEditor('math_input');
-    mathEditor.getValue();
+    //mathEditor.getValue();
 
     /*
     There is a bug in some component that doesn't allow text to be entered without pressing enter
@@ -32,12 +32,24 @@
         mathEditor.setLatex(latex);
     }
 
+	function getLatex() {
+        return mathEditor.getLatex();
+    }
+
 	/*
 	The required latex is passed on through URL parameters.
 	This is done because it is easier to persist any changes made by the user when moved to graph
 	activity.
 	*/
-	updateLatex((new URL(window.location.href)).searchParams.get('latex'));
+	var url = new URL(window.location.href);
+	updateLatex(url.searchParams.get('latex'));
+
+	var mode = url.searchParams.get('mode');
+	switch(mode)
+	{	case 'nokeyboard' :
+			mathEditor.noKeyboard();
+	}
+
 </script>
 
 </body>

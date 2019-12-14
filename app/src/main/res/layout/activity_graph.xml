@@ -4,23 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".EquationActivity">
+    tools:context=".GraphActivity">
+
+    <TextView
+        android:id="@+id/latexTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:text="Test" />
 
     <WebView
-        android:id="@+id/mathWebView"
+        android:id="@+id/graphWebView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="128dp"
+        android:layout_weight="0"
         android:background="#add8e6"
         android:focusable="false"
         android:focusableInTouchMode="true"
         android:gravity="center" />
-
-    <Button
-        android:id="@+id/graphit"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_weight="0"
-        android:text="Graph It!" />
-
 </LinearLayout>

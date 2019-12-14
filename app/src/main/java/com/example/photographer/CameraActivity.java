@@ -212,6 +212,15 @@ public class CameraActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        cameraCaptureSessions.close();
+        cameraDevice.close();
+        cameraDevice = null;
+    }
+
     private void stopBackgroundThread() {
         mBackgroundThread.quitSafely();
         try {
