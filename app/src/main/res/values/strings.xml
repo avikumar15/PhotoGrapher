@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Photo Grapher</string>
+    <string name="title_activity_equation">Edit Equation</string>
 </resources>
