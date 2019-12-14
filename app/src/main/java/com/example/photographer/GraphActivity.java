@@ -31,6 +31,8 @@ public class GraphActivity extends AppCompatActivity {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webView.loadUrl("about:blank");
+
+        //nokeyboard mode is used to remove keyboard and toolbars
         webView.loadUrl("file:///android_asset/math_text_box.html?latex=" + latexString + "&mode=nokeyboard");
     }
 }

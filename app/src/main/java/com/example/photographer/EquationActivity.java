@@ -63,6 +63,8 @@ public class EquationActivity extends AppCompatActivity {
 
     private void graphItClick() {
         final Intent intent = new Intent(this, GraphActivity.class);
+
+        //JavaScript is evaluated to retrieve the LaTeX from webView
         webView.evaluateJavascript("getLatex()", new ValueCallback<String>() {
             @Override
             public void onReceiveValue(String value) {
