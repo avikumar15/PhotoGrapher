@@ -12,7 +12,9 @@
 </head>
 <body>
 
-<div id="math_input"></div>
+<div id="math_input">
+</div>
+
 
 <script type="text/javascript">
 	var mathEditor = new MathEditor('math_input');
@@ -49,6 +51,8 @@
 	{	case 'nokeyboard' :
 			mathEditor.noKeyboard();
 	}
+	if(mode != 'nokeyboard')
+		$('#math_input').append('<span class="clear" onclick="mathEditor.setLatex(\'\')">CLEAR</span>');
 
 </script>
 

@@ -2,6 +2,11 @@ body{
 	width: 100%;
 }
 .matheditor-btn-span{
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
     min-width: 35px;
     height: 40px;
 	vertical-align: middle;
@@ -16,6 +21,31 @@ body{
     color: #000000;
     font-size: 16px;
     line-height: 30px;
+}
+.clear{
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+    min-width: 65px;
+	text-align: center;
+    height: auto;
+	vertical-align: middle;
+    background: transparent;
+    border: 1px solid #ddd;
+    margin-right: 4px;
+    margin-bottom: 4px;
+    background: #F9F9F9;
+    cursor: pointer;
+    overflow: hidden;
+    display: inline-block;
+    color: #000000;
+    font-size: 16px;
+    line-height: 30px;
+	position: absolute;
+	bottom: 0;
+	right: 0;
 }
 .matheditor-btn-span:hover{
     background: #FFF;
@@ -34,6 +64,11 @@ div[class^="matheditor-wrapper-"]{
     margin: auto;
 }
 div[class^="matheditor-toolbar-"]{
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
     position: fixed;
     bottom:205px;
 	margin-bottom: 3px;
@@ -43,7 +78,7 @@ div[class^="matheditor-toolbar-"]{
     background: #FFF;
 }
 div[class^="matheditor-wrapper-"] .mq-sup{
-	font-size: 80% !important; 
+	font-size: 80% !important;
     top: 0;
 }
 div[class^="matheditor-wrapper-"] .mq-sub{
@@ -117,8 +152,13 @@ div[class^="keyboard-"]{
 }
 
 div[id^="keys-"]{
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
     text-align: center;
-    display: block; 
+    display: block;
     position:fixed;
     z-index:999999;
     bottom:0px;
@@ -126,6 +166,13 @@ div[id^="keys-"]{
     width:100%;
     background: #f5f5f5;
 }
+
+div[id^="keys-"] .ks:active {
+  background-color: #ccc;
+  box-shadow: 0 1px #555;
+  transform: translateY(1px);
+}
+
 div[id^="keys-"] .ks{
     height: 45px;
     width: 25px;
