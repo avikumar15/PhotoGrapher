@@ -11,6 +11,9 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 public class EquationActivity extends AppCompatActivity {
 
     WebView webView;
@@ -46,13 +49,22 @@ public class EquationActivity extends AppCompatActivity {
 
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
-        webView.loadUrl("file:///android_asset/math_text_box.html?latex=" + latexString);
+
+        try {
+            webView.loadUrl("file:///android_asset/math_text_box.html?latex=" + URLEncoder.encode(latexString, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        webView.loadUrl("file:///android_asset/math_text_box.html?latex=" + latexString);
+        try {
+            webView.loadUrl("file:///android_asset/math_text_box.html?latex=" + URLEncoder.encode(latexString, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -68,7 +80,9 @@ public class EquationActivity extends AppCompatActivity {
         webView.evaluateJavascript("getLatex()", new ValueCallback<String>() {
             @Override
             public void onReceiveValue(String value) {
-                latexString = value.replaceAll("\"", "").replace("\\\\", "\\");
+                latexString = value.replaceAll("\"", "")
+                        .replace("\\\\", "\\")
+                        .replace("\\u003C", "<");
                 intent.putExtra("latex", latexString);
                 startActivity(intent);
             }

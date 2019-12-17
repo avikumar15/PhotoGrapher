@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 public class GraphActivity extends AppCompatActivity {
 
     WebView webView;
@@ -33,6 +36,10 @@ public class GraphActivity extends AppCompatActivity {
         webView.loadUrl("about:blank");
 
         //nokeyboard mode is used to remove keyboard and toolbars
-        webView.loadUrl("file:///android_asset/math_text_box.html?latex=" + latexString + "&mode=nokeyboard");
+        try {
+            webView.loadUrl("file:///android_asset/math_text_box.html?latex=" + URLEncoder.encode(latexString, "UTF-8") + "&mode=nokeyboard");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 }
