@@ -105,7 +105,7 @@ MathEditor.prototype.noKeyboard = function(){
 setVirtualKeyboard = function(top_elements,answer_span,field,keyboard_type,count){
     editor_id = jq(answer_span).attr('id')
     jq('#keys-'+editor_id).remove();
-    html = keyboardButtons(keyboard_type,editor_id); 
+    html = keyboardButtons(keyboard_type,editor_id);
     jq(html).insertAfter(answer_span);
     jq(answer_span).find('textarea').attr('readonly','readonly');
     jq(answer_span).focusin(function(o){
@@ -320,8 +320,8 @@ basicStyling = function(answer_span,top_elements){
     jq(answer_span).css('padding', 5);
     jq(answer_span).css('background', '#fbfafa');
     jq(answer_span).css('font-size', '24pt');
-    jq('#math_input').css('height', jq(window).height() - jq('.matheditor-toolbar-math_input').height() - jq('#keys-math_input').height() - 40);
-    jq('#math_input').css('max-height', jq(window).height() - jq('.matheditor-toolbar-math_input').height() - jq('#keys-math_input').height() - 40);
+    jq('#math_input').css('height', jq(window).height() - jq('.matheditor-toolbar-math_input').height() - jq('#keys-math_input').height() - 35);
+    jq('#math_input').css('max-height', jq(window).height() - jq('.matheditor-toolbar-math_input').height() - jq('#keys-math_input').height() - 35);
 	answerSpanWidth = jq(answer_span).width();
     jq('.matheditor-toolbar-math_input').css('width', jq(window).width() - 25);
 };

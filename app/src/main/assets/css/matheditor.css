@@ -1,6 +1,11 @@
 body{
 	width: 100%;
 }
+::-webkit-scrollbar {
+    width: 0px;
+	height: 0px;
+    background: transparent;
+}
 .matheditor-btn-span{
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -72,8 +77,10 @@ div[class^="matheditor-toolbar-"]{
 	user-select: none;
 	-webkit-tap-highlight-color: rgba(0,0,0,0);
     position: fixed;
+	height: 121px;
     bottom:205px;
 	margin-bottom: 3px;
+	padding-top: 3px;
     border: 1px solid #ddd;
     padding: 5px;
     border-radius: 4px;
@@ -112,7 +119,7 @@ div[class^="matheditor-wrapper-"] ul[class^="tabs-"]{
     padding: 0px;
     list-style: none;
     border-bottom: 1px solid #f4f4f4;
-    margin-bottom: 5px;
+    padding-bottom: 2px;
 	white-space: nowrap;
 	overflow-x: scroll;
     height: 30px;
@@ -125,6 +132,7 @@ div[class^="matheditor-wrapper-"] ul[class^="tabs-"] li{
     margin: 0px;
     height: 25px;
 	font-size: 20px;
+	transition: border-radius 0.5s, background 0.5s;
 }
 
 div[class^="matheditor-wrapper-"] li.current{
@@ -136,14 +144,21 @@ div[class^="matheditor-wrapper-"] li.current{
 }
 
 div[class^="matheditor-wrapper-"] .tab-content-me{
-    display: none;
+	padding-top: 2px;
+	position: absolute;
+	opacity: 0;
+	visibility: hidden;
+	transition: all 0.5s;
 }
 
 div[class^="matheditor-wrapper-"] .tab-content-me.current{
-    display: block;
+	padding-top: 2px;
+    opacity: 1;
+	visibility: visible;
     height: 88px;
     max-height: 88px;
     overflow-y: scroll;
+	position: absolute;
 }
 
 .mq-math-mode var.mq-f {
