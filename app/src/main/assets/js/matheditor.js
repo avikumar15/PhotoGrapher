@@ -73,13 +73,13 @@ MathEditor.prototype.setTemplate = function(name){
         editor_id = jq(this.answerSpan).attr('id')
         this.tabEnabled = false;
         this.template = 'floating-toolbar'
-        setToolbar(this.default_toolbar_buttons,this.answerSpan,this.answerMathField,this.topElements,this.default_toolbar_tabs,this.tabEnabled);
-        setCloseButton(this.topElements, this.answerSpan);
+
+		setCloseButton(this.topElements, this.answerSpan);
         jq(this.answerSpan).css('position','absolute');
         this.topElements.toolbar.css('position','absolute').css('min-width','315').css('width',jq(this.answerSpan).width()).css('z-index',999999);
         answerSpanHeight = jq(this.answerSpan).height();
         this.topElements.toolbar.css('margin-top',answerSpanHeight+13).hide();
-        this.topElements.buttons.css('margin-right','5').css('margin-bottom','5');
+        this.topElements.buttons.css('margin-right','5').css('margin-bottom','5').hide();
         mathed_tmp[editor_id] = this.topElements
         jq(this.answerSpan).focusin(function(o){
             jq.each(mathed_tmp, function(k,v){
@@ -96,12 +96,16 @@ MathEditor.prototype.noKeyboard = function(){
     editor_id = jq(this.answerSpan).attr('id');
     jq(this.answerSpan).find('textarea').removeAttr('readonly')
     jq('#keys-'+editor_id).remove();
+	this.topElements.toolbar.hide();
+    this.topElements.buttons.hide();
+	jq('#math_input').off();
+	jq('#math_input').css('height', jq(window).height() - 22);
 }
 
 setVirtualKeyboard = function(top_elements,answer_span,field,keyboard_type,count){
     editor_id = jq(answer_span).attr('id')
     jq('#keys-'+editor_id).remove();
-    html = keyboardButtons(keyboard_type,editor_id); 
+    html = keyboardButtons(keyboard_type,editor_id);
     jq(html).insertAfter(answer_span);
     jq(answer_span).find('textarea').attr('readonly','readonly');
     jq(answer_span).focusin(function(o){
@@ -149,12 +153,12 @@ keyboardAction = function(top_elements,answer_span,field){
             if(value=='CapsLock'){
                 caps = !caps;
                 if (caps){
-                    jq(a).css('background','#bbbbbb');
-                    jq(a).css('color','#428bca');
+                    jq(this).css('background','#bbbbbb');
+                    jq(this).css('color','#428bca');
                     jq('.ks').css('text-transform','uppercase')
                 }else{
-                    jq(a).css('background','#f5f5f5');
-                    jq(a).css('color','#000000');
+                    jq(this).css('background','#f5f5f5');
+                    jq(this).css('color','#000000');
                     jq('.ks').css('text-transform','lowercase');
                 }
                 field.focus();
@@ -316,8 +320,8 @@ basicStyling = function(answer_span,top_elements){
     jq(answer_span).css('padding', 5);
     jq(answer_span).css('background', '#fbfafa');
     jq(answer_span).css('font-size', '24pt');
-    jq('#math_input').css('height', jq(window).height() - jq('.matheditor-toolbar-math_input').height() - jq('#keys-math_input').height() - 40);
-    jq('#math_input').css('max-height', jq(window).height() - jq('.matheditor-toolbar-math_input').height() - jq('#keys-math_input').height() - 40);
+    jq('#math_input').css('height', jq(window).height() - jq('.matheditor-toolbar-math_input').height() - jq('#keys-math_input').height() - 35);
+    jq('#math_input').css('max-height', jq(window).height() - jq('.matheditor-toolbar-math_input').height() - jq('#keys-math_input').height() - 35);
 	answerSpanWidth = jq(answer_span).width();
     jq('.matheditor-toolbar-math_input').css('width', jq(window).width() - 25);
 };

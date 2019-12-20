@@ -1,9 +1,46 @@
 body{
 	width: 100%;
 }
+::-webkit-scrollbar {
+    width: 0px;
+	height: 0px;
+    background: transparent;
+}
 .matheditor-btn-span{
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
     min-width: 35px;
     height: 40px;
+	vertical-align: middle;
+    border: 1px solid #ddd;
+    margin-right: 4px;
+    margin-bottom: 4px;
+    background: #F9F9F9;
+    cursor: pointer;
+    overflow: hidden;
+    display: inline-block;
+    color: #000000;
+    font-size: 16px;
+    line-height: 30px;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+.matheditor-btn-span:active {
+  background-color: #ccc;
+  box-shadow: 0 1px #555;
+  transform: translateY(1px);
+}
+.clear{
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+    min-width: 65px;
+	text-align: center;
+    height: auto;
 	vertical-align: middle;
     background: transparent;
     border: 1px solid #ddd;
@@ -16,10 +53,9 @@ body{
     color: #000000;
     font-size: 16px;
     line-height: 30px;
-}
-.matheditor-btn-span:hover{
-    background: #FFF;
-    border: 1px solid #aaa
+	position: absolute;
+	bottom: 0;
+	right: 0;
 }
 .mq-editable-field span.mq-hasCursor{
   box-shadow: #68b4df 0 0 3px 2px !important;
@@ -34,16 +70,24 @@ div[class^="matheditor-wrapper-"]{
     margin: auto;
 }
 div[class^="matheditor-toolbar-"]{
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
     position: fixed;
+	height: 121px;
     bottom:205px;
 	margin-bottom: 3px;
+	padding-top: 3px;
     border: 1px solid #ddd;
     padding: 5px;
     border-radius: 4px;
     background: #FFF;
 }
 div[class^="matheditor-wrapper-"] .mq-sup{
-	font-size: 80% !important; 
+	font-size: 80% !important;
     top: 0;
 }
 div[class^="matheditor-wrapper-"] .mq-sub{
@@ -70,25 +114,29 @@ div[class^="matheditor-wrapper-"] .mq-root-block, .mq-math-mode .mq-root-block{
 }
 
 div[class^="matheditor-wrapper-"] ul[class^="tabs-"]{
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
     margin: 0px;
     padding: 0px;
     list-style: none;
     border-bottom: 1px solid #f4f4f4;
-    margin-bottom: 5px;
+    padding-bottom: 2px;
 	white-space: nowrap;
 	overflow-x: scroll;
     height: 30px;
 }
 div[class^="matheditor-wrapper-"] ul[class^="tabs-"] li{
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
     display: inline-block;
     padding: 2px 10px;
     cursor: pointer;
     margin: 0px;
     height: 25px;
 	font-size: 20px;
+	transition: border-radius 0.5s, background 0.5s;
 }
 
 div[class^="matheditor-wrapper-"] li.current{
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
     background: #444;
     color: #ffffff;
     font-weight: bold;
@@ -96,14 +144,21 @@ div[class^="matheditor-wrapper-"] li.current{
 }
 
 div[class^="matheditor-wrapper-"] .tab-content-me{
-    display: none;
+	padding-top: 2px;
+	position: absolute;
+	opacity: 0;
+	visibility: hidden;
+	transition: all 0.5s;
 }
 
 div[class^="matheditor-wrapper-"] .tab-content-me.current{
-    display: block;
+	padding-top: 2px;
+    opacity: 1;
+	visibility: visible;
     height: 88px;
     max-height: 88px;
     overflow-y: scroll;
+	position: absolute;
 }
 
 .mq-math-mode var.mq-f {
@@ -117,8 +172,13 @@ div[class^="keyboard-"]{
 }
 
 div[id^="keys-"]{
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
     text-align: center;
-    display: block; 
+    display: block;
     position:fixed;
     z-index:999999;
     bottom:0px;
@@ -126,7 +186,15 @@ div[id^="keys-"]{
     width:100%;
     background: #f5f5f5;
 }
+
+div[id^="keys-"] .ks:active {
+  background-color: #ccc;
+  box-shadow: 0 1px #555;
+  transform: translateY(1px);
+}
+
 div[id^="keys-"] .ks{
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
     height: 45px;
     width: 25px;
     display: inline-block;
