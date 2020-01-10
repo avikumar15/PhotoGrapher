@@ -1,9 +1,13 @@
-package com.example.photographer;
+package com.example.photographer.fragments;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.webkit.ValueCallback;
@@ -15,32 +19,33 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.example.photographer.R;
+import com.example.photographer.activities.GraphActivity;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-public class EquationActivity extends AppCompatActivity {
 
+public class EquationFragment extends Fragment {
     WebView webView;
-    String latexString;
+    String latexString = "";
     Button graphIt;
     ProgressBar progressBar;
     FrameLayout progressContainer;
+    public EquationFragment() {
+        // Required empty public constructor
+    }
 
-    @SuppressLint("SetJavaScriptEnabled")
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_equation);
-
-        Intent intent = this.getIntent();
-        latexString = intent.getStringExtra("latex");
-
-        webView = findViewById(R.id.mathWebView);
-        graphIt = findViewById(R.id.graphit);
-        progressBar = findViewById(R.id.progress_circular);
-        progressContainer = findViewById(R.id.progress_container);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_equation, container, false);
+        webView = view.findViewById(R.id.mathWebView);
+        graphIt = view.findViewById(R.id.graphit);
+        progressBar = view.findViewById(R.id.progress_circular);
+        progressContainer = view.findViewById(R.id.progress_container);
 
         graphIt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,15 +53,6 @@ public class EquationActivity extends AppCompatActivity {
                 graphItClick();
             }
         });
-
-        /*
-         * The app uses MathQuill, a javascript based latex editor
-         * One may ask, why use a JS library when libraries like jLatexmath exist for java.
-         * But, none of such libraries for java are WYSIWYG. They require LaTex to be hardcoded
-         * or expect the user to enter LaTex. This app is intended to make data entry easier and
-         * must be WYSIWYG. Though WebView is used, the app is completely offline.
-         */
-
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webView.setWebChromeClient(new WebChromeClient() {
@@ -71,17 +67,18 @@ public class EquationActivity extends AppCompatActivity {
                 }
             }
         });
-        webView.setWebViewClient(new MyWebViewClient());
+        webView.setWebViewClient(new EquationFragment.MyWebViewClient());
 
         try {
             webView.loadUrl("file:///android_asset/math_text_box.html?latex=" + URLEncoder.encode(latexString, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        return view;
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         webView.evaluateJavascript("getLatex()", new ValueCallback<String>() {
             @Override
@@ -92,7 +89,7 @@ public class EquationActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         try {
             webView.loadUrl("file:///android_asset/math_text_box.html?latex=" + URLEncoder.encode(latexString, "UTF-8"));
@@ -102,13 +99,13 @@ public class EquationActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         webView.loadUrl("about:blank");
     }
 
     private void graphItClick() {
-        final Intent intent = new Intent(this, GraphActivity.class);
+        final Intent intent = new Intent(getActivity(), GraphActivity.class);
 
         //JavaScript is evaluated to retrieve the LaTeX from webView
         webView.evaluateJavascript("getLatex()", new ValueCallback<String>() {
@@ -134,4 +131,5 @@ public class EquationActivity extends AppCompatActivity {
             return true;
         }
     }
+
 }

@@ -1,10 +1,11 @@
-package com.example.photographer;
+package com.example.photographer.fragments;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
@@ -14,24 +15,31 @@ import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.Base64;
 import android.util.Size;
+import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
+import com.example.photographer.R;
+import com.example.photographer.activities.GraphActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.Arrays;
 
-public class CameraActivity extends AppCompatActivity {
-
+public class CameraFragment extends Fragment {
     private final String LATEX_TEST = "\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}";
 
     private TextureView textureView;
@@ -65,14 +73,26 @@ public class CameraActivity extends AppCompatActivity {
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
     private FloatingActionButton capture;
+    private File galleryFolder;
+
+
+    public CameraFragment() {
+        // Required empty public constructor
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        capture = findViewById(R.id.capture);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_camera, container, false);
+        capture = view.findViewById(R.id.capture);
         capture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,26 +100,22 @@ public class CameraActivity extends AppCompatActivity {
             }
         });
 
-        textureView = findViewById(R.id.cameraView);
+        textureView = view.findViewById(R.id.cameraView);
         assert textureView != null;
         textureView.setSurfaceTextureListener(textureListener);
+        return view;
     }
 
     private void captureImage() {
-
-        //TODO: Modify method to capture image and retrieve LaTex from image
-        /*
-         * For now, a hardcoded latex string is passed on to EquationActivity
-         * For the time being let the string 'LATEX_TEST' be returned from the API that retrieves
-         * the math equations from the image. Now, we have to pass this into the EquationActivity
-         * and update the contents of the math input box. This is demonstrated by passing a
-         * test LaTex string to the EquationActivity.
-         */
-
-        Intent intent = new Intent(this, EquationActivity.class);
+        Bitmap bmp = textureView.getBitmap();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        byte[] byteImage = outputStream.toByteArray();
+        String encodedImage = Base64.encodeToString(byteImage, Base64.DEFAULT);
+        Intent intent = new Intent(getActivity(), GraphActivity.class);
         intent.putExtra("latex", LATEX_TEST);
         startActivity(intent);
-        finish();
+
     }
 
     private void createCameraPreview() {
@@ -121,7 +137,7 @@ public class CameraActivity extends AppCompatActivity {
 
                 @Override
                 public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
-                    Toast.makeText(CameraActivity.this, "Changed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Changed", Toast.LENGTH_SHORT).show();
                 }
             }, null);
         } catch (CameraAccessException e) {
@@ -131,7 +147,7 @@ public class CameraActivity extends AppCompatActivity {
 
     private void updatePreview() {
         if (cameraDevice == null)
-            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
         captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CaptureRequest.CONTROL_MODE_AUTO);
         try {
             cameraCaptureSessions.setRepeatingRequest(captureRequestBuilder.build(), null, mBackgroundHandler);
@@ -140,9 +156,8 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
-
     private void openCamera() {
-        CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+        CameraManager manager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);
         try {
             cameraId = manager.getCameraIdList()[0];
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
@@ -150,8 +165,8 @@ public class CameraActivity extends AppCompatActivity {
             assert map != null;
             imageDimension = map.getOutputSizes(SurfaceTexture.class)[0];
             //Check realtime permission if run higher API 23
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{
                         Manifest.permission.CAMERA,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                 }, REQUEST_CAMERA_PERMISSION);
@@ -163,7 +178,6 @@ public class CameraActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i1) {
@@ -190,14 +204,13 @@ public class CameraActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "You can't use camera without permission", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(getActivity(), "You can't use camera without permission", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         startBackgroundThread();
         if (textureView.isAvailable())
@@ -207,19 +220,20 @@ public class CameraActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         stopBackgroundThread();
         super.onPause();
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
 
         cameraCaptureSessions.close();
         cameraDevice.close();
         cameraDevice = null;
     }
+
 
     private void stopBackgroundThread() {
         mBackgroundThread.quitSafely();

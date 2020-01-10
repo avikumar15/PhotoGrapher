@@ -16,19 +16,11 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".GraphActivity"
+            android:name=".activities.GraphActivity"
             android:label="Graph"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".EquationActivity"
-            android:label="Equation"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".CameraActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
