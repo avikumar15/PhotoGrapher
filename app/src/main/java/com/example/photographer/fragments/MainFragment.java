@@ -15,8 +15,8 @@ import com.example.photographer.R;
 import com.example.photographer.activities.MainActivity;
 
 public class MainFragment extends Fragment {
-    ImageButton cameraButton;
-    Button manualEntry;
+    private ImageButton cameraButton;
+    private Button manualEntry;
 
     public MainFragment() {
         // Required empty public constructor
@@ -33,7 +33,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "camera button clicked", Toast.LENGTH_LONG).show();
-                ((MainActivity)getActivity()).setViewPager(1);
+                ((MainActivity)getActivity()).setViewPager(0);
             }
         });
 
