@@ -1,4 +1,4 @@
-package com.example.photographer;
+package com.example.photographer.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -8,6 +8,8 @@ import android.webkit.WebView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.photographer.R;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
