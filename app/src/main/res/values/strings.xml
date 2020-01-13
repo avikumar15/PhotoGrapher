@@ -4,4 +4,7 @@
     <string name="tab_title_home">HOME</string>
     <string name="tab_title_camera">CAMERA</string>
     <string name="tab_title_keyboard">KEYBOARD</string>
+    <!--TODO: Insert values of app_id and app_key -->
+    <string name="app_id"></string>
+    <string name="app_key"></string>
 </resources>
