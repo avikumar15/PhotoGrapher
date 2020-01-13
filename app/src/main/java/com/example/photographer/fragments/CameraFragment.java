@@ -33,11 +33,19 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import com.example.photographer.R;
 import com.example.photographer.activities.GraphActivity;
+import com.example.photographer.apiservice.ApiService;
+import com.example.photographer.apiservice.RetrofitInstance;
+import com.example.photographer.model.MathpixRequest;
+import com.example.photographer.model.MathpixResponse;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Arrays;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CameraFragment extends Fragment {
     private final String LATEX_TEST = "\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}";
@@ -112,9 +120,29 @@ public class CameraFragment extends Fragment {
         bmp.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
         byte[] byteImage = outputStream.toByteArray();
         String encodedImage = Base64.encodeToString(byteImage, Base64.DEFAULT);
-        Intent intent = new Intent(getActivity(), GraphActivity.class);
-        intent.putExtra("latex", LATEX_TEST);
-        startActivity(intent);
+        MathpixRequest req = new MathpixRequest();
+        req.setSrc(encodedImage);
+        ApiService service = RetrofitInstance.getRetrofitInstance().create(ApiService.class);
+        Call<MathpixResponse> call = service.getLatex(getString(R.string.app_id),
+                                                      getString(R.string.app_key), req);
+        call.enqueue(new Callback<MathpixResponse>() {
+            @Override
+            public void onResponse(Call<MathpixResponse> call, Response<MathpixResponse> response) {
+                String latex = response.body().getLatex_normal();
+                if(latex != null) {
+                    Intent intent = new Intent(getActivity(), GraphActivity.class);
+                    intent.putExtra("latex", latex);
+                    startActivity(intent);
+                }
+                Toast.makeText(getActivity(), response.body().getError(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<MathpixResponse> call, Throwable t) {
+                Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
     }
 
