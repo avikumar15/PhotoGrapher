@@ -19,7 +19,25 @@
         android:layout_marginBottom="32dp"
         android:background="@android:color/white"
         android:elevation="45dp"
-        android:src="@drawable/ic_camera_black"
+        android:src="@drawable/ic_camera_white"
         app:fabCustomSize="90dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/galleryImagesRV"
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="145dp"
+        android:elevation="45dp"
+        android:layout_height="80dp" />
+
+    <Button
+        android:id="@+id/openGallery"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_gravity="bottom|left"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="50dp"
+        android:background="@mipmap/outline_collections_white_18dp"
+        android:elevation="45dp" />
 
 </FrameLayout>
