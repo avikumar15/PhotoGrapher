@@ -137,13 +137,21 @@ public class CameraFragment extends Fragment {
             }
         });
         galleryImagesRV = view.findViewById(R.id.galleryImagesRV);
-        pathList = getAllImagePaths();
-        thumbnails = getAllThumbnails();
-        adapter = new ImageRecyclerViewAdapter(pathList, thumbnails, getActivity());
-        galleryImagesRV.setHasFixedSize(true);
-        galleryImagesRV.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL, false));
-        galleryImagesRV.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) !=
+                PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[] {
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+            }, REQUEST_READ_PERMISSION);
+        } else {
+            pathList = getAllImagePaths();
+            thumbnails = getAllThumbnails();
+            adapter = new ImageRecyclerViewAdapter(pathList, thumbnails, getActivity());
+            galleryImagesRV.setHasFixedSize(true);
+            galleryImagesRV.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL, false));
+            galleryImagesRV.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        }
+
         textureView = view.findViewById(R.id.cameraView);
         assert textureView != null;
         textureView.setSurfaceTextureListener(textureListener);
@@ -151,24 +159,17 @@ public class CameraFragment extends Fragment {
     }
 
     private List<Bitmap> getAllThumbnails() {
-        if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) !=
-                PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[] {
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-            }, REQUEST_READ_PERMISSION);
-        }
         ContentResolver cr = getActivity().getContentResolver();
-        Cursor ca = null;
         List<Bitmap> thumbs = new ArrayList<>();
         for(String path: pathList) {
-            ca = cr.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[] { MediaStore.MediaColumns._ID }, MediaStore.MediaColumns.DATA + "=?", new String[] {path}, null);
+            Cursor ca = cr.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[] { MediaStore.MediaColumns._ID }, MediaStore.MediaColumns.DATA + "=?", new String[] {path}, null);
             if (ca != null && ca.moveToFirst()) {
                 int id = ca.getInt(ca.getColumnIndex(MediaStore.MediaColumns._ID));
+                ca.close();
                 thumbs.add(MediaStore.Images.Thumbnails.getThumbnail(cr, id, MediaStore.Images.Thumbnails.MICRO_KIND, null));
             }
         }
 
-        ca.close();
         return thumbs;
     }
 
@@ -186,12 +187,6 @@ public class CameraFragment extends Fragment {
     }
 
     private List<String> getAllImagePaths() {
-        if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) !=
-                PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[] {
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-            }, REQUEST_READ_PERMISSION);
-        }
         List<String> paths = new ArrayList<>();
         String[] projection = new String[] {
                 MediaStore.MediaColumns.DATA,
@@ -353,6 +348,14 @@ public class CameraFragment extends Fragment {
         if(requestCode == REQUEST_READ_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(getActivity(), "Can't access gallery without permission", Toast.LENGTH_SHORT).show();
+            } else {
+                pathList = getAllImagePaths();
+                thumbnails = getAllThumbnails();
+                adapter = new ImageRecyclerViewAdapter(pathList, thumbnails, getActivity());
+                galleryImagesRV.setHasFixedSize(true);
+                galleryImagesRV.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL, false));
+                galleryImagesRV.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
             }
         }
     }
