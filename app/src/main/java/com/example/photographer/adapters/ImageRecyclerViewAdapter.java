@@ -37,10 +37,12 @@ import retrofit2.Response;
 public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecyclerViewAdapter.ViewHolder> {
 
     private List<String> pathList;
+    private List<Bitmap> thumbnails;
     private Context context;
 
-    public ImageRecyclerViewAdapter(List<String> pathList, Context context) {
+    public ImageRecyclerViewAdapter(List<String> pathList, List<Bitmap> thumbnails, Context context) {
         this.pathList = pathList;
+        this.thumbnails = thumbnails;
         this.context = context;
     }
 
@@ -54,24 +56,12 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
 
     @Override
     public void onBindViewHolder(@NonNull ImageRecyclerViewAdapter.ViewHolder holder, int position) {
-        Bitmap bmp = getThumbnail(context.getContentResolver(), pathList.get(position));
-        holder.galleryImageView.setImageBitmap(bmp);
+        //Bitmap bmp = getThumbnail(context.getContentResolver(), pathList.get(position));
+        holder.galleryImageView.setImageBitmap(thumbnails.get(position));
         holder.galleryImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
     }
 
-    public Bitmap getThumbnail(ContentResolver cr, String path){
 
-        Cursor ca = cr.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[] { MediaStore.MediaColumns._ID }, MediaStore.MediaColumns.DATA + "=?", new String[] {path}, null);
-        if (ca != null && ca.moveToFirst()) {
-            int id = ca.getInt(ca.getColumnIndex(MediaStore.MediaColumns._ID));
-            ca.close();
-            return MediaStore.Images.Thumbnails.getThumbnail(cr, id, MediaStore.Images.Thumbnails.MICRO_KIND, null );
-        }
-
-        ca.close();
-        return null;
-
-    }
 
     @Override
     public int getItemCount() {

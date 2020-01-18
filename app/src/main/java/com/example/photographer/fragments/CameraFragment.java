@@ -1,6 +1,7 @@
 package com.example.photographer.fragments;
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -92,6 +93,7 @@ public class CameraFragment extends Fragment {
     private Size imageDimension;
 
     private static final int REQUEST_CAMERA_PERMISSION = 200;
+    private static final int REQUEST_READ_PERMISSION = 500;
     private static final int GALLERY_IMAGE_FETCH = 211;
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
@@ -100,7 +102,7 @@ public class CameraFragment extends Fragment {
     private RecyclerView galleryImagesRV;
     private ImageRecyclerViewAdapter adapter;
     private List<String> pathList;
-
+    private List<Bitmap> thumbnails;
 
     public CameraFragment() {
         // Required empty public constructor
@@ -110,7 +112,6 @@ public class CameraFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
     }
 
     @Override
@@ -137,7 +138,8 @@ public class CameraFragment extends Fragment {
         });
         galleryImagesRV = view.findViewById(R.id.galleryImagesRV);
         pathList = getAllImagePaths();
-        adapter = new ImageRecyclerViewAdapter(pathList, getActivity());
+        thumbnails = getAllThumbnails();
+        adapter = new ImageRecyclerViewAdapter(pathList, thumbnails, getActivity());
         galleryImagesRV.setHasFixedSize(true);
         galleryImagesRV.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL, false));
         galleryImagesRV.setAdapter(adapter);
@@ -146,6 +148,28 @@ public class CameraFragment extends Fragment {
         assert textureView != null;
         textureView.setSurfaceTextureListener(textureListener);
         return view;
+    }
+
+    private List<Bitmap> getAllThumbnails() {
+        if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) !=
+                PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[] {
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+            }, REQUEST_READ_PERMISSION);
+        }
+        ContentResolver cr = getActivity().getContentResolver();
+        Cursor ca = null;
+        List<Bitmap> thumbs = new ArrayList<>();
+        for(String path: pathList) {
+            ca = cr.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[] { MediaStore.MediaColumns._ID }, MediaStore.MediaColumns.DATA + "=?", new String[] {path}, null);
+            if (ca != null && ca.moveToFirst()) {
+                int id = ca.getInt(ca.getColumnIndex(MediaStore.MediaColumns._ID));
+                thumbs.add(MediaStore.Images.Thumbnails.getThumbnail(cr, id, MediaStore.Images.Thumbnails.MICRO_KIND, null));
+            }
+        }
+
+        ca.close();
+        return thumbs;
     }
 
     private void galleryImageFetched(Uri imgURI) {
@@ -162,6 +186,12 @@ public class CameraFragment extends Fragment {
     }
 
     private List<String> getAllImagePaths() {
+        if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) !=
+                PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[] {
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+            }, REQUEST_READ_PERMISSION);
+        }
         List<String> paths = new ArrayList<>();
         String[] projection = new String[] {
                 MediaStore.MediaColumns.DATA,
@@ -315,8 +345,14 @@ public class CameraFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
-            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(getActivity(), "You can't use camera without permission", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        if(requestCode == REQUEST_READ_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getActivity(), "Can't access gallery without permission", Toast.LENGTH_SHORT).show();
             }
         }
     }
