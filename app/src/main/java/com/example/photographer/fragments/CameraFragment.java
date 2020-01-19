@@ -190,15 +190,13 @@ public class CameraFragment extends Fragment {
         List<String> paths = new ArrayList<>();
         String[] projection = new String[] {
                 MediaStore.MediaColumns.DATA,
-                MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
                 MediaStore.Images.Media.DATE_TAKEN
         };
         Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        String BUCKET_GROUP_BY = "1) GROUP BY 1,(1";
         String BUCKET_ORDER_BY = MediaStore.Images.Media.DATE_TAKEN + " DESC";
         Cursor cur = getActivity().getContentResolver().query(images,
                 projection,
-                BUCKET_GROUP_BY,
+                null,
                 null,
                 BUCKET_ORDER_BY
         );
