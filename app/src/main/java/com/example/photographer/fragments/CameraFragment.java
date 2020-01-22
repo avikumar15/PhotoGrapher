@@ -2,6 +2,7 @@ package com.example.photographer.fragments;
 
 import android.Manifest;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -64,7 +65,6 @@ import retrofit2.Response;
 import static android.app.Activity.RESULT_OK;
 
 public class CameraFragment extends Fragment {
-    //private final String LATEX_TEST = "\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}";
 
     private TextureView textureView;
     CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
@@ -101,8 +101,7 @@ public class CameraFragment extends Fragment {
     private Button galleryButton;
     private RecyclerView galleryImagesRV;
     private ImageRecyclerViewAdapter adapter;
-    private List<String> pathList;
-    private List<Bitmap> thumbnails;
+    private List<Uri> pathList;
 
     public CameraFragment() {
         // Required empty public constructor
@@ -144,8 +143,7 @@ public class CameraFragment extends Fragment {
             }, REQUEST_READ_PERMISSION);
         } else {
             pathList = getAllImagePaths();
-            thumbnails = getAllThumbnails();
-            adapter = new ImageRecyclerViewAdapter(pathList, thumbnails, getActivity());
+            adapter = new ImageRecyclerViewAdapter(pathList, getActivity());
             galleryImagesRV.setHasFixedSize(true);
             galleryImagesRV.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL, false));
             galleryImagesRV.setAdapter(adapter);
@@ -158,20 +156,6 @@ public class CameraFragment extends Fragment {
         return view;
     }
 
-    private List<Bitmap> getAllThumbnails() {
-        ContentResolver cr = getActivity().getContentResolver();
-        List<Bitmap> thumbs = new ArrayList<>();
-        for(String path: pathList) {
-            Cursor ca = cr.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[] { MediaStore.MediaColumns._ID }, MediaStore.MediaColumns.DATA + "=?", new String[] {path}, null);
-            if (ca != null && ca.moveToFirst()) {
-                int id = ca.getInt(ca.getColumnIndex(MediaStore.MediaColumns._ID));
-                ca.close();
-                thumbs.add(MediaStore.Images.Thumbnails.getThumbnail(cr, id, MediaStore.Images.Thumbnails.MICRO_KIND, null));
-            }
-        }
-
-        return thumbs;
-    }
 
     private void galleryImageFetched(Uri imgURI) {
         try {
@@ -186,29 +170,30 @@ public class CameraFragment extends Fragment {
 
     }
 
-    private List<String> getAllImagePaths() {
-        List<String> paths = new ArrayList<>();
+    private List<Uri> getAllImagePaths() {
+        List<Uri> paths = new ArrayList<>();
         String[] projection = new String[] {
-                MediaStore.MediaColumns.DATA,
+                MediaStore.MediaColumns._ID,
                 MediaStore.Images.Media.DATE_TAKEN
         };
         Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         String BUCKET_ORDER_BY = MediaStore.Images.Media.DATE_TAKEN + " DESC";
-        Cursor cur = getActivity().getContentResolver().query(images,
+        try(Cursor cur = getActivity().getContentResolver().query(images,
                 projection,
                 null,
                 null,
                 BUCKET_ORDER_BY
-        );
-
-        if (cur != null && cur.moveToFirst()) {
-            String path;
-            int pathColumn = cur.getColumnIndex(MediaStore.MediaColumns.DATA);
-            do {
-                path = cur.getString(pathColumn);
-                paths.add(path);
-            } while (cur.moveToNext());
-            cur.close();
+        )) {
+            int idColumn = cur.getColumnIndexOrThrow(MediaStore.Images.Media._ID);
+            if (cur != null && cur.moveToFirst()) {
+                do {
+                    long id = cur.getLong(idColumn);
+                    Uri contentUri = ContentUris.withAppendedId(
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
+                    paths.add(contentUri);
+                } while (cur.moveToNext());
+                cur.close();
+            }
         }
         return paths;
     }
@@ -228,7 +213,6 @@ public class CameraFragment extends Fragment {
     }
 
     private void sendRequest(String encodedImage) {
-        //Toast.makeText(getActivity(), "Sending request", Toast.LENGTH_LONG).show();
         MathpixRequest req = new MathpixRequest();
         req.setSrc(encodedImage);
         ApiService service = RetrofitInstance.getRetrofitInstance().create(ApiService.class);
@@ -348,8 +332,7 @@ public class CameraFragment extends Fragment {
                 Toast.makeText(getActivity(), "Can't access gallery without permission", Toast.LENGTH_SHORT).show();
             } else {
                 pathList = getAllImagePaths();
-                thumbnails = getAllThumbnails();
-                adapter = new ImageRecyclerViewAdapter(pathList, thumbnails, getActivity());
+                adapter = new ImageRecyclerViewAdapter(pathList, getActivity());
                 galleryImagesRV.setHasFixedSize(true);
                 galleryImagesRV.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL, false));
                 galleryImagesRV.setAdapter(adapter);

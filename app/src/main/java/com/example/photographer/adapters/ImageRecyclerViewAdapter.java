@@ -1,12 +1,11 @@
 package com.example.photographer.adapters;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.provider.MediaStore;
+import android.net.Uri;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,12 +16,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.photographer.R;
 import com.example.photographer.activities.GraphActivity;
 import com.example.photographer.apiservice.ApiService;
 import com.example.photographer.apiservice.RetrofitInstance;
 import com.example.photographer.model.MathpixRequest;
 import com.example.photographer.model.MathpixResponse;
+
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -36,13 +37,11 @@ import retrofit2.Response;
  */
 public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecyclerViewAdapter.ViewHolder> {
 
-    private List<String> pathList;
-    private List<Bitmap> thumbnails;
+    private List<Uri> pathList;
     private Context context;
 
-    public ImageRecyclerViewAdapter(List<String> pathList, List<Bitmap> thumbnails, Context context) {
+    public ImageRecyclerViewAdapter(List<Uri> pathList, Context context) {
         this.pathList = pathList;
-        this.thumbnails = thumbnails;
         this.context = context;
     }
 
@@ -56,8 +55,7 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
 
     @Override
     public void onBindViewHolder(@NonNull ImageRecyclerViewAdapter.ViewHolder holder, int position) {
-        //Bitmap bmp = getThumbnail(context.getContentResolver(), pathList.get(position));
-        holder.galleryImageView.setImageBitmap(thumbnails.get(position));
+        Glide.with(context).load(pathList.get(position)).into(holder.galleryImageView);
         holder.galleryImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
     }
 
@@ -77,9 +75,8 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String path = pathList.get(getAdapterPosition());
+                    String path = pathList.get(getAdapterPosition()).toString();
                     Bitmap bmp = BitmapFactory.decodeFile(path);
-                    //Toast.makeText(context, "Sending request for image path " + path, Toast.LENGTH_LONG).show();
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     bmp.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
                     byte[] byteImage = outputStream.toByteArray();
